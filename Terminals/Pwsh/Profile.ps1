@@ -1,4 +1,4 @@
-function Find-File($name) {
+function find($name) {
     Get-ChildItem -recurse -filter "*${name}*" -ErrorAction SilentlyContinue | ForEach-Object {
         $place_path = $_.directory
         Write-Host "${place_path}\${_}"
@@ -9,13 +9,12 @@ if ($host.Name -eq 'ConsoleHost') {
     Remove-Item Alias:ls -Force
     function ls_git { & 'C:\Program Files\Git\usr\bin\ls' --color=auto -hF $args }
     Set-Alias -Name ls -Value ls_git -Option Private
-
-    Set-Alias -Name vim -Value 'C:\Program Files\Git\usr\bin\vim.exe'
 }
 
 function dotcommit {
-    git add .
-    git commit -m "work in progress: ."
+    git add -A
+    git commit -m .
+    git push
 }
 
 Remove-Item Alias:gc -Force
@@ -110,3 +109,10 @@ function prompt {
     }
     return "> "
 }
+
+function vim {
+    nvim @args
+}
+
+$env:EDITOR = "nvim"
+
